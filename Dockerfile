@@ -65,8 +65,8 @@ RUN set -eux; \
 	\
 	mkdir -p "$ROCKETMQ_HOME"; \
 	7z x $ROCKETMQ_PATH.zip; \
-	mv rocketmq-all*/* $ROCKETMQ_HOME; \
-	rmdir rocketmq-all*  ; \
+	mv rocketmq*/* $ROCKETMQ_HOME; \
+	rmdir rocketmq*  ; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
