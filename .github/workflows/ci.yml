@@ -1,7 +1,8 @@
 name: ci
 
 on:
-  push:
+  #push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -34,7 +35,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build dockerfile (with push)
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.8.0 --tag dyrnq/rocketmq:4.8.0
-          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.0 --tag dyrnq/rocketmq:4.9.0
-          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.1 --tag dyrnq/rocketmq:4.9.1
-          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.1 --tag dyrnq/rocketmq:latest
+          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.8.0 --tag dyrnq/rocketmq:4.8.0
+          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.0 --tag dyrnq/rocketmq:4.9.0
+          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.1 --tag dyrnq/rocketmq:4.9.1
+          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.2 --tag dyrnq/rocketmq:4.9.2 --tag dyrnq/rocketmq:latest
