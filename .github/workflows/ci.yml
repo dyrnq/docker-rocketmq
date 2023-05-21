@@ -39,5 +39,5 @@ jobs:
           #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.0 --tag dyrnq/rocketmq:4.9.0
           #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.1 --tag dyrnq/rocketmq:4.9.1
           #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.2 --tag dyrnq/rocketmq:4.9.2
-          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.3 --tag dyrnq/rocketmq:4.9.3
-          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=5.1.0 --tag dyrnq/rocketmq:5.1.0 --tag dyrnq/rocketmq:latest
+          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.5 --tag dyrnq/rocketmq:4.9.5
+          docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=5.1.1 --tag dyrnq/rocketmq:5.1.1 --tag dyrnq/rocketmq:latest
