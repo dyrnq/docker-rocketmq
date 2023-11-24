@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:jdk8u362-b09-debian
+FROM adoptopenjdk/openjdk8:jdk8u392-b08-debian
 
 ARG version=4.8.0
 ARG tz=Asia/Shanghai
