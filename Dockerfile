@@ -1,4 +1,5 @@
-FROM adoptopenjdk/openjdk8:jdk8u392-b08-debian
+FROM adoptopenjdk/openjdk8:jdk8u422-b05-debian
+
 
 ARG version=4.8.0
 ARG tz=Asia/Shanghai
@@ -18,7 +19,7 @@ RUN set -ex; \
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.12
+ENV GOSU_VERSION 1.17
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
@@ -130,7 +131,8 @@ RUN \
 	sed -i '/^numactl --interleave/,$d' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
 	sed -i '$aexec \$JAVA \${JAVA_OPT} \$@' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
 	sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqbroker; \
-	sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqnamesrv;
+	sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqnamesrv; \
+	test -f ${ROCKETMQ_HOME}/bin/mqproxy && sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqproxy;
 	
 
 WORKDIR ${ROCKETMQ_HOME}/bin
