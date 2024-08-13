@@ -132,7 +132,7 @@ RUN \
 	sed -i '$aexec \$JAVA \${JAVA_OPT} \$@' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
 	sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqbroker; \
 	sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqnamesrv; \
-	test -f ${ROCKETMQ_HOME}/bin/mqproxy && sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqproxy;
+	if [ -f ${ROCKETMQ_HOME}/bin/mqproxy ]; then sed -i "s@sh \${ROCKETMQ_HOME}@exec \${ROCKETMQ_HOME}@g" ${ROCKETMQ_HOME}/bin/mqproxy; fi;
 	
 
 WORKDIR ${ROCKETMQ_HOME}/bin
