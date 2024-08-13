@@ -39,12 +39,41 @@ jobs:
           echo "Status:    ${{ steps.buildx.outputs.status }}"
           echo "Flags:     ${{ steps.buildx.outputs.flags }}"
           echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+      # -
+      #   name: Login to DockerHub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build dockerfile (with no push)
+        run: |
+
+          latest=$(cat latest);
+          echo $latest;
+          latest_tag="--tag dyrnq/rocketmq:${{ matrix.vers }}";
+          if [[ "${{ matrix.vers }}" = "5.3.0" ]]; then
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
+          fi
+
+          echo $latest_tag;
+
+
+
+          docker buildx build \
+          --platform linux/amd64,linux/arm64/v8 \
+          --output "type=image,push=false" \
+          --file ./Dockerfile . \
+          --build-arg version="${{ matrix.vers }}" \
+          $latest_tag
+
+
       -
         name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build dockerfile (with push)
         run: |
 
@@ -65,6 +94,7 @@ jobs:
           --file ./Dockerfile . \
           --build-arg version="${{ matrix.vers }}" \
           $latest_tag
+
 
           #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.8.0 --tag dyrnq/rocketmq:4.8.0
           #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.0 --tag dyrnq/rocketmq:4.9.0
