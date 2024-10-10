@@ -127,6 +127,7 @@ RUN set -eux; \
 RUN \
 	sed -i '/-server -Xms/d' ${ROCKETMQ_HOME}/bin/runserver.sh; \
 	sed -i "s@\$JAVA \${JAVA_OPT}@exec \$JAVA \${JAVA_OPT}@g" ${ROCKETMQ_HOME}/bin/runserver.sh; \
+	sed -i "s@\"\$JAVA\" \${JAVA_OPT}@exec \"\$JAVA\" \${JAVA_OPT}@g" ${ROCKETMQ_HOME}/bin/runserver.sh; \
 	sed -i '/-server -Xms/d;/-XX:MaxDirectMemorySize=/d' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
 	sed -i '/^numactl --interleave/,$d' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
 	sed -i '$aexec \$JAVA \${JAVA_OPT} \$@' ${ROCKETMQ_HOME}/bin/runbroker.sh; \
