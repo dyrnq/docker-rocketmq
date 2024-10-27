@@ -10,6 +10,10 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
+          base_img:
+          - "adoptopenjdk/openjdk8:jdk8u422-b05-debian"
+          - "eclipse-temurin:8u422-b05-jdk-noble"
+          - "eclipse-temurin:21.0.4_7-jdk-noble"
           vers:
           - "5.0.0"
           - "5.1.0"
@@ -40,21 +44,32 @@ jobs:
           echo "Status:    ${{ steps.buildx.outputs.status }}"
           echo "Flags:     ${{ steps.buildx.outputs.flags }}"
           echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-      # -
-      #   name: Login to DockerHub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build dockerfile (with no push)
         run: |
 
           latest=$(cat latest);
           echo $latest;
           latest_tag="--tag dyrnq/rocketmq:${{ matrix.vers }}";
-          if [[ "${{ matrix.vers }}" = "5.3.0" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
-          fi
+
+
+          base_img="${{matrix.base_img}}"
+
+          if [[ "${base_img}" =~ "openjdk8" ]]; then
+            if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
+              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+            fi
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+          if
+
+          if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
+          if
+
+          if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
+          if
+
 
           echo $latest_tag;
 
@@ -65,6 +80,7 @@ jobs:
           --output "type=image,push=false" \
           --file ./Dockerfile . \
           --build-arg version="${{ matrix.vers }}" \
+          --build-arg BASE_IMAGE="${base_img}" \
           $latest_tag
 
 
@@ -81,9 +97,26 @@ jobs:
           latest=$(cat latest);
           echo $latest;
           latest_tag="--tag dyrnq/rocketmq:${{ matrix.vers }}";
-          if [[ "${{ matrix.vers }}" = "5.3.0" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
-          fi
+
+
+          base_img="${{matrix.base_img}}"
+
+          if [[ "${base_img}" =~ "openjdk8" ]]; then
+            if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
+              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+            fi
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+          if
+
+          if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
+          if
+
+          if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
+            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
+          if
+
 
           echo $latest_tag;
 
@@ -94,15 +127,7 @@ jobs:
           --output "type=image,push=true" \
           --file ./Dockerfile . \
           --build-arg version="${{ matrix.vers }}" \
+          --build-arg BASE_IMAGE="${base_img}" \
           $latest_tag
 
 
-          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.8.0 --tag dyrnq/rocketmq:4.8.0
-          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.0 --tag dyrnq/rocketmq:4.9.0
-          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.1 --tag dyrnq/rocketmq:4.9.1
-          #docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.2 --tag dyrnq/rocketmq:4.9.2
-          # docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.6 --tag dyrnq/rocketmq:4.9.6
-          # docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=4.9.7 --tag dyrnq/rocketmq:4.9.7
-          # docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=5.1.2 --tag dyrnq/rocketmq:5.1.2
-          # docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=5.1.3 --tag dyrnq/rocketmq:5.1.3 --tag dyrnq/rocketmq:latest
-          # docker buildx build --platform linux/amd64,linux/arm64 --output "type=image,push=true" --file ./Dockerfile . --build-arg version=5.1.4 --tag dyrnq/rocketmq:5.1.4 --tag dyrnq/rocketmq:latest
