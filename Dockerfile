@@ -1,4 +1,3 @@
-FROM adoptopenjdk/openjdk8:jdk8u422-b05-debian
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
