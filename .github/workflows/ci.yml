@@ -56,19 +56,19 @@ jobs:
 
           if [[ "${base_img}" =~ "openjdk8" ]]; then
             if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
-              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
             fi
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
-          if
+          fi
 
           if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
-          if
+          fi
 
           if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
-          if
+          fi
 
 
           echo $latest_tag;
@@ -103,19 +103,19 @@ jobs:
 
           if [[ "${base_img}" =~ "openjdk8" ]]; then
             if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
-              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
+              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
             fi
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
-          if
+          fi
 
           if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
-          if
+          fi
 
           if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
             latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
-          if
+          fi
 
 
           echo $latest_tag;
