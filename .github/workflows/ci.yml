@@ -44,45 +44,9 @@ jobs:
           echo "Status:    ${{ steps.buildx.outputs.status }}"
           echo "Flags:     ${{ steps.buildx.outputs.flags }}"
           echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-      - name: Build dockerfile (with no push)
+      - name: Build dockerfile (without push)
         run: |
-
-          latest=$(cat latest);
-          echo $latest;
-          latest_tag="--tag dyrnq/rocketmq:${{ matrix.vers }}";
-
-
-          base_img="${{matrix.base_img}}"
-
-          if [[ "${base_img}" =~ "openjdk8" ]]; then
-            if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
-              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
-            fi
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
-          fi
-
-          if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
-          fi
-
-          if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
-          fi
-
-
-          echo $latest_tag;
-
-
-
-          docker buildx build \
-          --platform linux/amd64,linux/arm64/v8 \
-          --output "type=image,push=false" \
-          --file ./Dockerfile . \
-          --build-arg version="${{ matrix.vers }}" \
-          --build-arg BASE_IMAGE="${base_img}" \
-          $latest_tag
-
+          ./buildx.sh --push false --repo ${{ secrets.DOCKER_USERNAME }} --base ${{ matrix.base_img }} --version ${{ matrix.vers }}
 
       -
         name: Login to DockerHub
@@ -93,41 +57,4 @@ jobs:
 
       - name: Build dockerfile (with push)
         run: |
-
-          latest=$(cat latest);
-          echo $latest;
-          latest_tag="--tag dyrnq/rocketmq:${{ matrix.vers }}";
-
-
-          base_img="${{matrix.base_img}}"
-
-          if [[ "${base_img}" =~ "openjdk8" ]]; then
-            if [[ "${{ matrix.vers }}" = "${latest}" ]]; then
-              latest_tag="${latest_tag} --tag dyrnq/rocketmq:latest"
-            fi
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8"
-          fi
-
-          if [[ "${base_img}" =~ "eclipse-temurin:8u422" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk8-noble"
-          fi
-
-          if [[ "${base_img}" =~ "eclipse-temurin:21" ]]; then
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21-noble"
-            latest_tag="${latest_tag} --tag dyrnq/rocketmq:${{ matrix.vers }}-jdk21"
-          fi
-
-
-          echo $latest_tag;
-
-
-
-          docker buildx build \
-          --platform linux/amd64,linux/arm64/v8 \
-          --output "type=image,push=true" \
-          --file ./Dockerfile . \
-          --build-arg version="${{ matrix.vers }}" \
-          --build-arg BASE_IMAGE="${base_img}" \
-          $latest_tag
-
-
+          ./buildx.sh --push true --repo ${{ secrets.DOCKER_USERNAME }} --base ${{ matrix.base_img }} --version ${{ matrix.vers }}
