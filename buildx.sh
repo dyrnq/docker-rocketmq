@@ -63,7 +63,7 @@ if [[ "${base_image}" =~ "openjdk8" ]]; then
     fi
     latest_tag="${latest_tag} --tag $repo/$image_name:$version"
     latest_tag="${latest_tag} --tag $repo/$image_name:${version}-jdk8"
-elif [[ "${base_image}" =~ "eclipse-temurin:8u422" ]]; then
+elif [[ "${base_image}" =~ "eclipse-temurin:8u" ]]; then
     latest_tag="${latest_tag} --tag $repo/$image_name:${version}-jdk8-noble"
 elif [[ "${base_image}" =~ "eclipse-temurin:21" ]]; then
     latest_tag="${latest_tag} --tag $repo/$image_name:${version}-jdk21-noble"
