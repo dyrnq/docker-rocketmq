@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  #push:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version to build'
+        required: true
+        default: '5.3.2'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+        fail-fast: false
+        matrix:
+          base_img:
+          - "adoptopenjdk/openjdk8:jdk8u442-b06-debian"
+          - "eclipse-temurin:8u442-b06-jdk-noble"
+          - "eclipse-temurin:21.0.6_7-jdk-noble"
+          # vers:
+          # - "5.0.0"
+          # - "5.1.0"
+          # - "5.1.1"
+          # - "5.1.2"
+          # - "5.1.3"
+          # - "5.1.4"
+          # - "5.2.0"
+          # - "5.3.0"
+          # - "5.3.1"
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Inspect builder
+        run: |
+          echo "Name:      ${{ steps.buildx.outputs.name }}"
+          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+          echo "Status:    ${{ steps.buildx.outputs.status }}"
+          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+      - name: Build dockerfile (without push)
+        run: |
+          ver="${{ github.event.inputs.version }}"
+          ./buildx.sh --push false --repo ${{ secrets.DOCKER_USERNAME }} --base ${{ matrix.base_img }} --version "${ver}"
+
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build dockerfile (with push)
+        run: |
+          ver="${{ github.event.inputs.version }}"
+          ./buildx.sh --push true --repo ${{ secrets.DOCKER_USERNAME }} --base ${{ matrix.base_img }} --version "${ver}"
