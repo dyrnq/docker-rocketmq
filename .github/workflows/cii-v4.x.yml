@@ -11,9 +11,9 @@ jobs:
         fail-fast: false
         matrix:
           base_img:
-          - "adoptopenjdk/openjdk8:jdk8u442-b06-debian"
-          - "eclipse-temurin:8u442-b06-jdk-noble"
-          - "eclipse-temurin:21.0.6_7-jdk-noble"
+          - "dyrnq/openjdk8:jdk8u472-b08-debian"
+          - "eclipse-temurin:8u472-b08-jdk-noble"
+          - "eclipse-temurin:21.0.9_10-jdk-noble"
           vers:
           - "4.9.8"
           - "4.9.7"
